@@ -1,0 +1,365 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0DD29FC81532445100A5B9E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DD29FC71532445100A5B9E8 /* Foundation.framework */; };
+		0DD29FD31532445100A5B9E8 /* WeePreferenceLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DD29FD21532445100A5B9E8 /* WeePreferenceLoader.mm */; };
+		0DD29FDF153244C900A5B9E8 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DD29FDD153244B900A5B9E8 /* libsubstrate.dylib */; };
+		0DD29FE1153245DC00A5B9E8 /* Preferences in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DD29FE0153245DC00A5B9E8 /* Preferences */; };
+		0DD29FEA15324B2400A5B9E8 /* WeePreferenceLoaderModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DD29FE815324B2400A5B9E8 /* WeePreferenceLoaderModel.h */; };
+		0DD29FEB15324B2400A5B9E8 /* WeePreferenceLoaderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DD29FE915324B2400A5B9E8 /* WeePreferenceLoaderModel.m */; };
+		0DD29FF115324DAB00A5B9E8 /* DebugTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DD29FF015324DAB00A5B9E8 /* DebugTools.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0DD29FC41532445100A5B9E8 /* WeePreferenceLoader.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = WeePreferenceLoader.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DD29FC71532445100A5B9E8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		0DD29FCC1532445100A5B9E8 /* control.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = control.txt; path = Package/DEBIAN/control.txt; sourceTree = "<group>"; };
+		0DD29FCD1532445100A5B9E8 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
+		0DD29FCF1532445100A5B9E8 /* PackageVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PackageVersion.plist; sourceTree = "<group>"; };
+		0DD29FD01532445100A5B9E8 /* WeePreferenceLoader-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WeePreferenceLoader-Prefix.pch"; sourceTree = "<group>"; };
+		0DD29FD11532445100A5B9E8 /* WeePreferenceLoader.xm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WeePreferenceLoader.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		0DD29FD21532445100A5B9E8 /* WeePreferenceLoader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WeePreferenceLoader.mm; sourceTree = "<group>"; };
+		0DD29FD71532445100A5B9E8 /* WeePreferenceLoader.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = WeePreferenceLoader.plist; path = Package/Library/MobileSubstrate/DynamicLibraries/WeePreferenceLoader.plist; sourceTree = "<group>"; };
+		0DD29FDD153244B900A5B9E8 /* libsubstrate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsubstrate.dylib; path = /opt/iOSOpenDev/lib/libsubstrate.dylib; sourceTree = "<absolute>"; };
+		0DD29FE0153245DC00A5B9E8 /* Preferences */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Preferences; path = System/Library/PrivateFrameworks/Preferences.framework/Preferences; sourceTree = SDKROOT; };
+		0DD29FE815324B2400A5B9E8 /* WeePreferenceLoaderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeePreferenceLoaderModel.h; sourceTree = "<group>"; };
+		0DD29FE915324B2400A5B9E8 /* WeePreferenceLoaderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeePreferenceLoaderModel.m; sourceTree = "<group>"; };
+		0DD29FF015324DAB00A5B9E8 /* DebugTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugTools.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0DD29FC01532445100A5B9E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0DD29FC81532445100A5B9E8 /* Foundation.framework in Frameworks */,
+				0DD29FDF153244C900A5B9E8 /* libsubstrate.dylib in Frameworks */,
+				0DD29FE1153245DC00A5B9E8 /* Preferences in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0DD29FB71532445100A5B9E8 = {
+			isa = PBXGroup;
+			children = (
+				0DD29FC91532445100A5B9E8 /* WeePreferenceLoader */,
+				0DD29FC61532445100A5B9E8 /* Frameworks */,
+				0DD29FC51532445100A5B9E8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0DD29FC51532445100A5B9E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FC41532445100A5B9E8 /* WeePreferenceLoader.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0DD29FC61532445100A5B9E8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FE0153245DC00A5B9E8 /* Preferences */,
+				0DD29FDD153244B900A5B9E8 /* libsubstrate.dylib */,
+				0DD29FC71532445100A5B9E8 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0DD29FC91532445100A5B9E8 /* WeePreferenceLoader */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FD11532445100A5B9E8 /* WeePreferenceLoader.xm */,
+				0DD29FD21532445100A5B9E8 /* WeePreferenceLoader.mm */,
+				0DD29FE815324B2400A5B9E8 /* WeePreferenceLoaderModel.h */,
+				0DD29FE915324B2400A5B9E8 /* WeePreferenceLoaderModel.m */,
+				0DD29FCA1532445100A5B9E8 /* Package */,
+				0DD29FCE1532445100A5B9E8 /* Supporting Files */,
+			);
+			path = WeePreferenceLoader;
+			sourceTree = "<group>";
+		};
+		0DD29FCA1532445100A5B9E8 /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FCB1532445100A5B9E8 /* DEBIAN */,
+				0DD29FD41532445100A5B9E8 /* Library */,
+			);
+			name = Package;
+			sourceTree = "<group>";
+		};
+		0DD29FCB1532445100A5B9E8 /* DEBIAN */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FCC1532445100A5B9E8 /* control.txt */,
+				0DD29FCD1532445100A5B9E8 /* control */,
+			);
+			name = DEBIAN;
+			sourceTree = "<group>";
+		};
+		0DD29FCE1532445100A5B9E8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FCF1532445100A5B9E8 /* PackageVersion.plist */,
+				0DD29FD01532445100A5B9E8 /* WeePreferenceLoader-Prefix.pch */,
+				0DD29FF015324DAB00A5B9E8 /* DebugTools.h */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0DD29FD41532445100A5B9E8 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FD51532445100A5B9E8 /* MobileSubstrate */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		0DD29FD51532445100A5B9E8 /* MobileSubstrate */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FD61532445100A5B9E8 /* DynamicLibraries */,
+			);
+			name = MobileSubstrate;
+			sourceTree = "<group>";
+		};
+		0DD29FD61532445100A5B9E8 /* DynamicLibraries */ = {
+			isa = PBXGroup;
+			children = (
+				0DD29FD71532445100A5B9E8 /* WeePreferenceLoader.plist */,
+			);
+			name = DynamicLibraries;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		0DD29FC11532445100A5B9E8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0DD29FEA15324B2400A5B9E8 /* WeePreferenceLoaderModel.h in Headers */,
+				0DD29FF115324DAB00A5B9E8 /* DebugTools.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		0DD29FC31532445100A5B9E8 /* WeePreferenceLoader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0DD29FDA1532445100A5B9E8 /* Build configuration list for PBXNativeTarget "WeePreferenceLoader" */;
+			buildPhases = (
+				0DD29FBE1532445100A5B9E8 /* ShellScript */,
+				0DD29FBF1532445100A5B9E8 /* Sources */,
+				0DD29FC01532445100A5B9E8 /* Frameworks */,
+				0DD29FC11532445100A5B9E8 /* Headers */,
+				0DD29FC21532445100A5B9E8 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WeePreferenceLoader;
+			productName = WeePreferenceLoader;
+			productReference = 0DD29FC41532445100A5B9E8 /* WeePreferenceLoader.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0DD29FB91532445100A5B9E8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "University of British Columbia";
+			};
+			buildConfigurationList = 0DD29FBC1532445100A5B9E8 /* Build configuration list for PBXProject "WeePreferenceLoader" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 0DD29FB71532445100A5B9E8;
+			productRefGroup = 0DD29FC51532445100A5B9E8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0DD29FC31532445100A5B9E8 /* WeePreferenceLoader */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0DD29FBE1532445100A5B9E8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp-logos";
+		};
+		0DD29FC21532445100A5B9E8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0DD29FBF1532445100A5B9E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0DD29FD31532445100A5B9E8 /* WeePreferenceLoader.mm in Sources */,
+				0DD29FEB15324B2400A5B9E8 /* WeePreferenceLoaderModel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0DD29FD81532445100A5B9E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = "$(iOSOpenDevPath)/frameworks/**";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = Release;
+		};
+		0DD29FD91532445100A5B9E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = "$(iOSOpenDevPath)/frameworks/**";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = Debug;
+		};
+		0DD29FDB1532445100A5B9E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WeePreferenceLoader/WeePreferenceLoader-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks/Preferences.framework\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = YES;
+				iOSOpenDevInstallOnProfiling = NO;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Release;
+		};
+		0DD29FDC1532445100A5B9E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WeePreferenceLoader/WeePreferenceLoader-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks/Preferences.framework\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = YES;
+				iOSOpenDevInstallOnProfiling = NO;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0DD29FBC1532445100A5B9E8 /* Build configuration list for PBXProject "WeePreferenceLoader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DD29FD81532445100A5B9E8 /* Release */,
+				0DD29FD91532445100A5B9E8 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0DD29FDA1532445100A5B9E8 /* Build configuration list for PBXNativeTarget "WeePreferenceLoader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DD29FDB1532445100A5B9E8 /* Release */,
+				0DD29FDC1532445100A5B9E8 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0DD29FB91532445100A5B9E8 /* Project object */;
+}
