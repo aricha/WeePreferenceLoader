@@ -18,7 +18,7 @@
 #define LOG_THREAD DLog(@"Main thread: %@", ([NSThread isMainThread] ? @"YES", @"NO"))
 #define LOG_BACKTRACE DLog(@"Backtrace: %@", [NSThread callStackSymbols])
 #else
-#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define DLog(fmt, ...)
 #define ULog(fmt, ...)
 
 #define LOG_FN_CALL

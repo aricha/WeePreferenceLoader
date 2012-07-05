@@ -1,15 +1,15 @@
-Package: arichardson.WeePreferenceLoader
+Package: com.arichardson.WeePreferenceLoader
 Name: WeePreferenceLoader
 Version: 1.0-1
-Description: 
+Description: A framework to load preferences in Notifications settings.
 Section: System
 Depends: firmware (>= 5.0), mobilesubstrate
 Conflicts: 
 Replaces: 
 Priority: optional
 Architecture: iphoneos-arm
-Author: Andrew Richardson
-dev: 
+Author: Andrew Richardson <andrewr114@gmail.com>
+dev: Andrew Richardson <andrewr114@gmail.com>
 Homepage: 
 Depiction: 
 Maintainer: 

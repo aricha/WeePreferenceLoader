@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D740F14159ACD8F004C5424 /* WPTargetProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D740F12159ACD8F004C5424 /* WPTargetProxy.h */; };
+		0D740F15159ACD8F004C5424 /* WPTargetProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D740F13159ACD8F004C5424 /* WPTargetProxy.m */; };
 		0DD29FC81532445100A5B9E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DD29FC71532445100A5B9E8 /* Foundation.framework */; };
 		0DD29FD31532445100A5B9E8 /* WeePreferenceLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DD29FD21532445100A5B9E8 /* WeePreferenceLoader.mm */; };
 		0DD29FDF153244C900A5B9E8 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DD29FDD153244B900A5B9E8 /* libsubstrate.dylib */; };
@@ -17,9 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D740F12159ACD8F004C5424 /* WPTargetProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WPTargetProxy.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		0D740F13159ACD8F004C5424 /* WPTargetProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = WPTargetProxy.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		0DD29FC41532445100A5B9E8 /* WeePreferenceLoader.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = WeePreferenceLoader.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DD29FC71532445100A5B9E8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		0DD29FCC1532445100A5B9E8 /* control.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = control.txt; path = Package/DEBIAN/control.txt; sourceTree = "<group>"; };
 		0DD29FCD1532445100A5B9E8 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
 		0DD29FCF1532445100A5B9E8 /* PackageVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PackageVersion.plist; sourceTree = "<group>"; };
 		0DD29FD01532445100A5B9E8 /* WeePreferenceLoader-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WeePreferenceLoader-Prefix.pch"; sourceTree = "<group>"; };
@@ -78,6 +81,8 @@
 			isa = PBXGroup;
 			children = (
 				0DD29FD11532445100A5B9E8 /* WeePreferenceLoader.xm */,
+				0D740F12159ACD8F004C5424 /* WPTargetProxy.h */,
+				0D740F13159ACD8F004C5424 /* WPTargetProxy.m */,
 				0DD29FD21532445100A5B9E8 /* WeePreferenceLoader.mm */,
 				0DD29FE815324B2400A5B9E8 /* WeePreferenceLoaderModel.h */,
 				0DD29FE915324B2400A5B9E8 /* WeePreferenceLoaderModel.m */,
@@ -99,7 +104,6 @@
 		0DD29FCB1532445100A5B9E8 /* DEBIAN */ = {
 			isa = PBXGroup;
 			children = (
-				0DD29FCC1532445100A5B9E8 /* control.txt */,
 				0DD29FCD1532445100A5B9E8 /* control */,
 			);
 			name = DEBIAN;
@@ -148,6 +152,7 @@
 			files = (
 				0DD29FEA15324B2400A5B9E8 /* WeePreferenceLoaderModel.h in Headers */,
 				0DD29FF115324DAB00A5B9E8 /* DebugTools.h in Headers */,
+				0D740F14159ACD8F004C5424 /* WPTargetProxy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,8 +184,8 @@
 		0DD29FB91532445100A5B9E8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = "University of British Columbia";
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "";
 			};
 			buildConfigurationList = 0DD29FBC1532445100A5B9E8 /* Build configuration list for PBXProject "WeePreferenceLoader" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -235,12 +240,110 @@
 			files = (
 				0DD29FD31532445100A5B9E8 /* WeePreferenceLoader.mm in Sources */,
 				0DD29FEB15324B2400A5B9E8 /* WeePreferenceLoaderModel.m in Sources */,
+				0D740F15159ACD8F004C5424 /* WPTargetProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		0D740F07159821CB004C5424 /* Release - iPad */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = "$(iOSOpenDevPath)/frameworks/**";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				SDKROOT = iphoneos5.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = "Release - iPad";
+		};
+		0D740F08159821CB004C5424 /* Release - iPad */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WeePreferenceLoader/WeePreferenceLoader-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks/Preferences.framework\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = 192.168.1.127;
+				iOSOpenDevInstallOnAnyBuild = YES;
+				iOSOpenDevInstallOnProfiling = NO;
+				iOSOpenDevRespringOnInstall = NO;
+				iOSOpenDevUsePackageVersionPList = NO;
+			};
+			name = "Release - iPad";
+		};
+		0D740F09159821D2004C5424 /* Debug - iPad */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = "$(iOSOpenDevPath)/frameworks/**";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				SDKROOT = iphoneos5.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = "Debug - iPad";
+		};
+		0D740F0A159821D2004C5424 /* Debug - iPad */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WeePreferenceLoader/WeePreferenceLoader-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks/Preferences.framework\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = 192.168.1.127;
+				iOSOpenDevInstallOnAnyBuild = YES;
+				iOSOpenDevInstallOnProfiling = NO;
+				iOSOpenDevRespringOnInstall = NO;
+				iOSOpenDevUsePackageVersionPList = NO;
+			};
+			name = "Debug - iPad";
+		};
 		0DD29FD81532445100A5B9E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -254,9 +357,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos5.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				iOSOpenDevPath = /opt/iOSOpenDev;
@@ -283,9 +386,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos5.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 				iOSOpenDevPath = /opt/iOSOpenDev;
@@ -310,8 +413,8 @@
 				iOSOpenDevDevice = "";
 				iOSOpenDevInstallOnAnyBuild = YES;
 				iOSOpenDevInstallOnProfiling = NO;
-				iOSOpenDevRespringOnInstall = YES;
-				iOSOpenDevUsePackageVersionPList = YES;
+				iOSOpenDevRespringOnInstall = NO;
+				iOSOpenDevUsePackageVersionPList = NO;
 			};
 			name = Release;
 		};
@@ -333,8 +436,8 @@
 				iOSOpenDevDevice = "";
 				iOSOpenDevInstallOnAnyBuild = YES;
 				iOSOpenDevInstallOnProfiling = NO;
-				iOSOpenDevRespringOnInstall = YES;
-				iOSOpenDevUsePackageVersionPList = YES;
+				iOSOpenDevRespringOnInstall = NO;
+				iOSOpenDevUsePackageVersionPList = NO;
 			};
 			name = Debug;
 		};
@@ -345,7 +448,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0DD29FD81532445100A5B9E8 /* Release */,
+				0D740F07159821CB004C5424 /* Release - iPad */,
 				0DD29FD91532445100A5B9E8 /* Debug */,
+				0D740F09159821D2004C5424 /* Debug - iPad */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -354,7 +459,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0DD29FDB1532445100A5B9E8 /* Release */,
+				0D740F08159821CB004C5424 /* Release - iPad */,
 				0DD29FDC1532445100A5B9E8 /* Debug */,
+				0D740F0A159821D2004C5424 /* Debug - iPad */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

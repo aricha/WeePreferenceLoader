@@ -1,6 +1,6 @@
 //
 //  WeePreferenceLoaderModel.m
-//  zHookTest
+//  WeePreferenceLoader
 //
 //  Created by Andrew Richardson on 12-03-11.
 //  Copyright (c) 2012. All rights reserved.
@@ -12,9 +12,11 @@
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
 #import <BulletinBoard/BBSectionInfo.h>
+#import <Preferences/PSTableCell.h>
+#import "WPTargetProxy.h"
 
 // Different from <iOS5
-extern NSArray* SpecifiersFromPlist(NSDictionary* plist,
+extern NSMutableArray* SpecifiersFromPlist(NSDictionary* plist,
                                     PSSpecifier *specifier,
                                     id target,
                                     NSString *plistName,
@@ -22,17 +24,67 @@ extern NSArray* SpecifiersFromPlist(NSDictionary* plist,
                                     NSString** pSpecifierID,
                                     NSMutableArray** pBundleControllers);
 
-#define footerTextKey @"footerText"
+extern NSString *const PSFooterTextGroupKey;
 
 #define ROOT_DIR @"/Library/WeePreferenceLoader/Preferences"
+
+// used internally
+NSString *const WeePreferenceLoaderTargetProxyKey = @"targetProxy";
+
+// used by the WeeApp bundle's Info.plist
+NSString *const WeeAppPreferencePlistNameKey = @"PreferencesPlistName";
+
+// used by the preference plist
+NSString *const WeePreferenceLoaderBundleKey = @"bundle";
+NSString *const WeePreferenceLoaderBundlePathKey = @"bundlePath";
+NSString *const WeePreferenceLoaderSectionsKey = @"sections";
+NSString *const WeePreferenceLoaderTitleKey = @"title";
+
+@interface NSObject (WeePreferenceLoaderBundle)
+
+- (id)initWithListController:(PSListController *)controller;
+- (void)configureSpecifiers:(NSMutableArray *)specifiers;
+
+@end
+
+@interface WPEntry : NSObject
+
+@property (nonatomic, retain) NSDictionary *plist;
+@property (nonatomic, copy) NSString *plistName;
+@property (nonatomic, copy) NSString *plistPath;
+@property (nonatomic, retain) NSArray *sections;
+@property (nonatomic) BOOL fromWeeAppBundle;
+
+@end
+
+@implementation WPEntry
+
+@synthesize plist, plistName, plistPath, sections;
+
+- (void) dealloc {
+    [plist release];
+    [plistName release];
+    [plistPath release];
+    [sections release];
+    
+    [super dealloc];
+}
+
+- (id) initWithPlist:(NSDictionary *)aPlist {
+    if ((self = [super init])) {
+        plist = [aPlist retain];
+    }
+    return self;
+}
+
+@end
 
 @implementation WeePreferenceLoaderModel
 
 - (id) init {
     self = [super init];
     if (self) {
-        entries = [NSMutableDictionary dictionary];
-        bundleControllers = [NSMutableDictionary dictionary];
+        entries = [NSMutableArray new];
     }
     
     return self;
@@ -40,13 +92,23 @@ extern NSArray* SpecifiersFromPlist(NSDictionary* plist,
 
 - (void) dealloc {
     [entries release];
-    [bundleControllers release];
     
     [super dealloc];
 }
 
-- (NSArray *) bundleControllersForSection:(BBSectionInfo *)section {
-    return [bundleControllers objectForKey:section.sectionID];
+- (NSMutableArray *) entriesForSectionInfo:(BBSectionInfo *)sectionInfo {
+    NSMutableArray *matchedEntries = [NSMutableArray arrayWithCapacity:entries.count];
+    for (WPEntry *entry in entries) {
+        // entries with no specified sections are currently added to all sections
+        if (!entry.sections || entry.sections.count == 0 || [entry.sections containsObject:sectionInfo.sectionID])
+            [matchedEntries addObject:entry];
+    }
+    
+    WPEntry *weeAppEntry = [self weeAppEntryForSectionInfo:sectionInfo];
+    if (weeAppEntry)
+        [matchedEntries insertObject:weeAppEntry atIndex:0];
+    
+    return matchedEntries;
 }
 
 - (void) loadEntries {
@@ -65,26 +127,15 @@ extern NSArray* SpecifiersFromPlist(NSDictionary* plist,
         
         NSString *fullPath = [ROOT_DIR stringByAppendingPathComponent:path];
         NSMutableDictionary *plist = [NSMutableDictionary dictionaryWithContentsOfFile:fullPath];
+        WPEntry *entry = [[[WPEntry alloc] initWithPlist:plist] autorelease];
         
-        NSString *plistName = [[path lastPathComponent] stringByDeletingPathExtension];
+        entry.plistName = [[path lastPathComponent] stringByDeletingPathExtension];
+        entry.plistPath = [fullPath stringByDeletingLastPathComponent];
+        entry.sections = [plist objectForKey:WeePreferenceLoaderSectionsKey];
         
-        NSArray *sectionIDs = [plist objectForKey:@"sectionIDs"];
-        if (!sectionIDs) {
-            // use single section ID key as backup
-            NSString *sectionID = [plist objectForKey:@"sectionID"];
-            if (!sectionID) {
-                DLog(@"Error: No sectionID specified for WeePreferenceLoader plist %@", plistName);
-                continue;
-            }
-            else
-                sectionIDs = [NSArray arrayWithObject:sectionID];
-        }
-        
-        [plist setObject:plistName forKey:@"plistName"];
-        
-        NSString *bundleName = [plist objectForKey:@"bundle"];
+        NSString *bundleName = [plist objectForKey:WeePreferenceLoaderBundleKey];
         if (bundleName) {
-            NSString *bundlePath = [plist objectForKey:@"bundlePath"];
+            NSString *bundlePath = [plist objectForKey:WeePreferenceLoaderBundlePathKey];
             if (!bundlePath) {
                 // search for bundle
                 NSString *fullBundleName = [bundleName stringByAppendingPathExtension:@"bundle"];
@@ -97,165 +148,149 @@ extern NSArray* SpecifiersFromPlist(NSDictionary* plist,
                 }
                 
                 if (found && bundlePath) {
-                    [plist setObject:bundlePath forKey:@"bundlePath"];
+                    [plist setObject:bundlePath forKey:WeePreferenceLoaderBundlePathKey];
                 }
                 else {
                     // No bundle found, discard plist
-                    NSLog(@"Error: WeePreferenceLoader found no bundle found for specified bundle %@", bundleName);
+                    NSLog(@"Error: WeePreferenceLoader could not find specified bundle %@ for plist %@", bundleName, entry.plistName);
                     continue;
                 }
             }
         }
-        else {
-            [plist setObject:[fullPath stringByDeletingLastPathComponent] forKey:@"plistPath"];
-        }
         
-        for (NSString *sectionID in sectionIDs) {
-            NSMutableArray *weeAppEntries = [entries objectForKey:sectionID];
-            if (!weeAppEntries) {
-                weeAppEntries = [NSMutableArray arrayWithObject:plist];
-                [entries setObject:weeAppEntries forKey:sectionID];
-            }
-            else
-                [weeAppEntries addObject:plist];
-        }
+        [entries addObject:entry];
     }
 }
 
-- (NSDictionary *) loadWeeAppSpecifiersForSectionInfo:(BBSectionInfo *)info {
-    NSString *weeBundlePath = info.pathToWeeAppPluginBundle;
+- (WPEntry *) weeAppEntryForSectionInfo:(BBSectionInfo *)info {
+    if (!info) {
+        return nil;
+    }
     
+    NSString *weeBundlePath = info.pathToWeeAppPluginBundle;
     NSBundle *weeAppBundle = [NSBundle bundleWithPath:weeBundlePath];
     NSString *weeAppID = info.sectionID;
     
-    NSString *path = [[weeAppBundle bundlePath] stringByAppendingPathComponent:@"Preferences.plist"];
+    // if the weeAppBundle has a preference plist within it, it should use the specified key in its info.plist
+    // to indicate its name, in which case we retrieve it and use it as a regular bundle
+    NSString *plistName = [[weeAppBundle infoDictionary] objectForKey:WeeAppPreferencePlistNameKey];
+    
+    NSString *path = [[weeBundlePath stringByAppendingPathComponent:plistName] stringByAppendingPathExtension:@"plist"];
     NSMutableDictionary *plist = [NSMutableDictionary dictionaryWithContentsOfFile:path];
     
     if (!plist) {
-        // Second try - use bundle name
-        path = [[weeAppBundle bundlePath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist", [[[weeAppBundle bundlePath] lastPathComponent] stringByDeletingPathExtension]]];
+        // No name specified - try Preferences.plist
+        path = [weeBundlePath stringByAppendingPathComponent:@"Preferences.plist"];
         plist = [NSDictionary dictionaryWithContentsOfFile:path];
         
         if (!plist) {
-            // Last try - use app ID
-            path = [[weeAppBundle bundlePath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist", weeAppID]];
+            // Last try - <appID>.plist
+            path = [[weeBundlePath stringByAppendingPathComponent:weeAppID] stringByAppendingPathExtension:@"plist"];
             plist = [NSDictionary dictionaryWithContentsOfFile:path];
         }
     }
     
     if (!plist) {
         DLog(@"No weeAppBundle plist found for BB section %@", weeAppID);
-        return plist;
+        return nil;
     }
     
-    NSString *plistName = [[path lastPathComponent] stringByDeletingPathExtension];
+    WPEntry *entry = [[[WPEntry alloc] initWithPlist:plist] autorelease];
+    entry.fromWeeAppBundle = YES;
     
-    [plist setObject:plistName forKey:@"plistName"];
+    if (!plistName)
+        plistName = [[path lastPathComponent] stringByDeletingPathExtension];
     
-    // used as a fallback if no bundle is specified
-    [plist setObject:[NSNumber numberWithBool:YES] forKey:@"useWeeAppBundle"];
+    entry.plistName = plistName;
     
-    return plist;
+    // used as a fallback if no bundle path is specified (bundle path is retrieved later) - this is done
+    // so that localized strings and other resources can still be used if a dedicated preferences bundle
+    // is not provided
+    entry.plistPath = weeBundlePath;
+    
+    return entry;
 }
 
-- (NSArray *) loadSpecifiersForListController:(PSListController *)controller sectionInfo:(BBSectionInfo *)info {    
+- (NSArray *) loadSpecifiersForListController:(PSListController *)listController sectionInfo:(BBSectionInfo *)info {
+    if (!info) {
+        NSLog(@"Error: no BB section info given for controller %@", listController);
+        return nil;
+    }
+    
     NSString *weeBundlePath = info.pathToWeeAppPluginBundle;
-    NSBundle *weeAppBundle = [NSBundle bundleWithPath:weeBundlePath];
     NSString *sectionID = info.sectionID;
     
-    NSMutableArray *sectionEntries = [NSMutableArray arrayWithArray:[entries objectForKey:sectionID]];
-    
-    if (weeBundlePath) {
-        NSDictionary *bundlePlist = [self loadWeeAppSpecifiersForSectionInfo:info];
-        if (bundlePlist)
-            [sectionEntries insertObject:bundlePlist atIndex:0];
-    }
+    NSMutableArray *sectionEntries = [self entriesForSectionInfo:info];
     
     NSMutableArray *specifiers = [NSMutableArray array];
     
-    for (NSDictionary *plist in sectionEntries) {
-        NSString *bundleName = [plist objectForKey:@"bundle"];
+    for (WPEntry *entry in sectionEntries) {
+        NSString *bundleName = [entry.plist objectForKey:WeePreferenceLoaderBundleKey];
         NSBundle *bundle = nil;
+        id bundleController = nil;
         
-        DLog(@"Loading plist %@", [plist objectForKey:@"plistName"]);
+        DLog(@"Loading plist %@", entry.plistName);//[plist objectForKey:WeePreferenceLoaderPlistNameKey]);
         
         if (bundleName) {
             DLog(@"BB section %@ has a bundle, it is: %@", sectionID, bundleName);
             
-            NSString *bundlePath = [plist objectForKey:@"bundlePath"];
+            NSString *bundlePath = [entry.plist objectForKey:WeePreferenceLoaderBundlePathKey];
             if (bundlePath) {
                 bundle = [NSBundle bundleWithPath:bundlePath];
                 if (!bundle) {
-                    DLog(@"No bundle found for bundlePath %@, will disregard", bundlePath);
+                    NSLog(@"Error: WeePreferenceLoader found no bundle for plist %@ with specified bundlePath %@", entry.plistName, bundlePath);
                     continue;
                 }
             }
             else if (weeBundlePath) {
-                // bundlePath should be specified if loaded from WeePreferenceLoader folder, so only applicable
-                // for entries loaded from weeAppBundle
-                
+                // bundlePath should be specified if loaded from WeePreferenceLoader folder (either by the plist itself, or
+                // by WeePreferenceLoader at runtime), so should only be applicable to entries loaded from weeAppBundle
                 bundle = [NSBundle bundleWithPath:[weeBundlePath stringByAppendingFormat:@"/%@.bundle", bundleName]];
                 if (!bundle) {
                     bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:@"/Library/WeePreferenceLoader/Preferences/%@.bundle", bundleName]];
-                    
-//#warning test code
-//                    if (!bundle) {
-//                        bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:@"/Library/PreferenceBundles/%@.bundle", bundleName]];
-//                    }
                 }
             }
             
             if (!bundle) {
-                DLog(@"Bundle %@ not found for BB section %@, will disregard", bundleName, sectionID);
+                NSLog(@"WeePreferenceLoader found no bundle %@ for sectionID %@, will disregard", bundleName, sectionID);
                 continue;
             }
             
             DLog(@"Bundle found for BB section %@! It is: %@", sectionID, bundle);
+            
+            // implicitly loads the entire bundle, making all classes contained in the bundle available for use
             Class BundleClass = [bundle principalClass];
-            if (BundleClass) {                
-                NSMutableArray *sectionControllers = [bundleControllers objectForKey:sectionID];
-                if (sectionControllers) {
-                    BOOL exists = NO;
-                    for (id controller in sectionControllers) {
-                        if ([controller isKindOfClass:BundleClass]) {
-                            exists = YES;
-                            break;
-                        }
-                    }
-                    
-                    if (!exists)
-                        [sectionControllers addObject:[[BundleClass alloc] init]];
-                }
-                else {
-                    id controller = [[BundleClass alloc] init];
-                    sectionControllers = [NSMutableArray arrayWithObject:controller];
-                    [bundleControllers setObject:sectionControllers forKey:sectionID];
-                }
+            
+            if (BundleClass) {
+                // provide list controller if bundle controller will accept it (optional)
+                if ([BundleClass instancesRespondToSelector:@selector(initWithListController:)])
+                    bundleController = [[[BundleClass alloc] initWithListController:listController] autorelease];
+                else
+                    bundleController = [[BundleClass new] autorelease];
             }
         }
         else {
-            if (weeAppBundle && [(NSNumber *)[plist objectForKey:@"useWeeAppBundle"] boolValue])
-                bundle = weeAppBundle;
-            else {
-                NSString *plistPath = [plist objectForKey:@"plistPath"];
-                if (!plistPath)
-                    plistPath = ROOT_DIR;
-                bundle = [NSBundle bundleWithPath:plistPath];
-            }
+            NSString *plistPath = entry.plistPath;
+            if (!plistPath)
+                plistPath = ROOT_DIR;
+            bundle = [NSBundle bundleWithPath:plistPath];
             
-            DLog(@"plist %@ for BB section %@ does NOT have a bundle, we'll use %@ instead", [plist objectForKey:@"plistName"], sectionID, bundle);
+            DLog(@"plist %@ for BB section %@ does NOT have a bundle, we'll use %@ instead", entry.plistName, sectionID, bundle);
         }
         
-        NSString *plistName = [plist objectForKey:@"plistName"];
+        NSMutableArray *bundleSpecifiers = SpecifiersFromPlist(entry.plist,
+                                                               [listController specifier],
+                                                               listController,
+                                                               entry.plistName,
+                                                               bundle,
+                                                               NULL,
+                                                               NULL);
         
-        NSArray *bundleSpecifiers = SpecifiersFromPlist(plist,
-                                                        [controller specifier],
-                                                        controller,
-                                                        plistName,
-                                                        bundle,
-                                                        NULL,
-                                                        NULL);
+        // just in case Apple decides to make them immutable
+        if (![bundleSpecifiers isKindOfClass:[NSMutableArray class]])
+            bundleSpecifiers = [NSMutableArray arrayWithArray:bundleSpecifiers];
         
+        // localize strings
         if (bundle && ![[bundle bundlePath] isEqualToString:ROOT_DIR]) {
             for (PSSpecifier *spec in bundleSpecifiers) {
                 if ([spec name])
@@ -271,22 +306,47 @@ extern NSArray* SpecifiersFromPlist(NSDictionary* plist,
                     [spec setTitleDictionary:localizedTitles];
                 }
                 
-                NSString *footer = [spec propertyForKey:footerTextKey];
+                NSString *footer = [spec propertyForKey:PSFooterTextGroupKey];
                 if (footer)
-                    [spec setProperty:NSLocalizedStringWithDefaultValue(footer, nil, bundle, footer, nil) forKey:footerTextKey];
+                    [spec setProperty:NSLocalizedStringWithDefaultValue(footer, nil, bundle, footer, nil) forKey:PSFooterTextGroupKey];
             }
         }
         
         if (bundleSpecifiers) {
-            if ([(PSSpecifier *)[bundleSpecifiers objectAtIndex:0] cellType] != PSGroupCell) {
-                NSString *title = [plist objectForKey:@"title"]; // title can be nil
+            if (bundleController) {
+                // give bundle controller a chance to modify the specifiers at runtime
+                if ([bundleController respondsToSelector:@selector(configureSpecifiers:)])
+                    [bundleController configureSpecifiers:bundleSpecifiers];
+                
+                // only necessary if a bundle controller actually exists
+                [self addProxyTargetsForSpecifiers:bundleSpecifiers
+                                withViewController:listController
+                                  bundleController:bundleController];
+            }
+            
+            if ([(PSSpecifier *)[bundleSpecifiers objectAtIndex:0] cellType] != [PSTableCell cellTypeFromString:@"PSGroupCell"]) {
+                NSString *title = [entry.plist objectForKey:WeePreferenceLoaderTitleKey]; // title can be nil
                 [specifiers addObject:[PSSpecifier groupSpecifierWithName:title]];
             }
+            
             [specifiers addObjectsFromArray:bundleSpecifiers];
         }
     }
     
     return specifiers;
+}
+
+- (void) addProxyTargetsForSpecifiers:(NSArray *)specifiers
+                   withViewController:(UIViewController *)controller
+                     bundleController:(NSObject *)bundleController
+{
+    for (PSSpecifier *spec in specifiers) {
+        WPTargetProxy *targetProxy = [[[WPTargetProxy alloc] initWithViewController:controller
+                                                                   bundleController:bundleController] autorelease];
+        [spec setTarget:targetProxy];
+        // use an associated object to ensure proxy is released at the correct time
+        objc_setAssociatedObject(spec, WeePreferenceLoaderTargetProxyKey, targetProxy, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
 }
 
 @end

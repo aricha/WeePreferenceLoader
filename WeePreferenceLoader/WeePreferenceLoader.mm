@@ -3,53 +3,37 @@
 
 
 
+
+
+
+
+
+
+
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
 #import <BulletinBoard/BBSectionInfo.h>
+#import <objc/runtime.h>
 
 #import "WeePreferenceLoaderModel.h"
 
-static WeePreferenceLoaderModel *loader = nil;
-
-#include <substrate.h>
-@class BulletinBoardAppDetailController; @class BulletinBoardController; @class PSListController; 
-
-#line 13 "/Users/andrewr114/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
-
-
-static id (*__ungrouped$PSListController$specifiers)(PSListController*, SEL);static id $_ungrouped$PSListController$specifiers(PSListController* self, SEL _cmd) {
-    NSArray *specs = __ungrouped$PSListController$specifiers(self, _cmd);
-    for (PSSpecifier *spec in specs) {
-
-        DLog(@"Specifier name: %@, titleDict: %@, properties: %@", [spec name], [spec titleDictionary], [spec properties]);
-    }
+static WeePreferenceLoaderModel *WPLoaderModel() {
+    static WeePreferenceLoaderModel *loader = nil;
     
-    return specs;
+    if (!loader)
+        loader = [[WeePreferenceLoaderModel alloc] init];
+    
+    return loader;
 }
 
+#include <substrate.h>
+@class BulletinBoardAppDetailController; @class BulletinBoardController; 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#line 28 "/Users/andrewr114/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
 
 
 static id (*__ungrouped$BulletinBoardController$init)(BulletinBoardController*, SEL);static id $_ungrouped$BulletinBoardController$init(BulletinBoardController* self, SEL _cmd) {
-    [loader loadEntries];
+    [WPLoaderModel() loadEntries];
     return __ungrouped$BulletinBoardController$init(self, _cmd);
 }
 
@@ -57,99 +41,52 @@ static id (*__ungrouped$BulletinBoardController$init)(BulletinBoardController*, 
 
 
 
+static NSString *const WeePreferenceLoaderSpecifiersLoadedKey = @"WeePreferenceLoaderSpecifiersLoadedKey";
+
 static BBSectionInfo* sectionInfoForBBAppDetailController (id controller) {
     return [[(PSListController *)controller specifier] propertyForKey:@"BBSECTION_INFO_KEY"];
 }
 
-static id (*__ungrouped$BulletinBoardAppDetailController$forwardingTargetForSelector$)(BulletinBoardAppDetailController*, SEL, SEL);static id $_ungrouped$BulletinBoardAppDetailController$forwardingTargetForSelector$(BulletinBoardAppDetailController* self, SEL _cmd, SEL selector) {
-    NSLog(@"-[<BulletinBoardAppDetailController: %p> forwardingTargetForSelector:%@]", self, NSStringFromSelector(selector));
-    
-    id target = __ungrouped$BulletinBoardAppDetailController$forwardingTargetForSelector$(self, _cmd, selector);
-    if (!target) {
-        NSArray *controllers = [loader bundleControllersForSection:sectionInfoForBBAppDetailController(self)];
-        if (controllers) {
-            for (id controller in controllers) {
-                if ([controller respondsToSelector:selector]) {
-                    DLog(@"Bundle controller %@ responds to %@ !", controller, NSStringFromSelector(selector));
-                    target = controller;
-                    break;
-                }
-            }
-            if (!target) {
-                DLog(@"No bundle controller found that responds to %@", NSStringFromSelector(selector));
-            }
-        }
-        else {
-            DLog(@"No bundle controllers found for section %@", sectionInfoForBBAppDetailController(self).sectionID);
-        }
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-    
-    return target;
-}
-
-static id (*__ungrouped$BulletinBoardAppDetailController$specifiers)(BulletinBoardAppDetailController*, SEL);static id $_ungrouped$BulletinBoardAppDetailController$specifiers(BulletinBoardAppDetailController* self, SEL _cmd) { 
-    NSLog(@"-[<BulletinBoardAppDetailController: %p> specifiers]", self); 
+static id (*__ungrouped$BulletinBoardAppDetailController$specifiers)(BulletinBoardAppDetailController*, SEL);static id $_ungrouped$BulletinBoardAppDetailController$specifiers(BulletinBoardAppDetailController* self, SEL _cmd) {
+    id specifiersToReturn = __ungrouped$BulletinBoardAppDetailController$specifiers(self, _cmd);
     
     id specifiers = MSHookIvar<id>(self, "_specifiers");
+    
+    
+    NSNumber *specsLoaded = objc_getAssociatedObject(specifiers, WeePreferenceLoaderSpecifiersLoadedKey);
+    
+    if (!specsLoaded || ![specsLoaded boolValue]) {
+        DLog(@"adding specifiers!");
         
-    if (!specifiers) {
-        specifiers = __ungrouped$BulletinBoardAppDetailController$specifiers(self, _cmd);
         
-        NSArray *specifiersToAdd = [loader loadSpecifiersForListController:(PSListController *)self 
-                                                               sectionInfo:sectionInfoForBBAppDetailController(self)];
-        
-        if (specifiersToAdd)
-            [specifiers addObjectsFromArray:specifiersToAdd];
-        
-        for (PSSpecifier *spec in specifiers) {
-            DLog(@"Specifier name: %@, titleDict: %@, properties: %@", [spec name], [spec titleDictionary], [spec properties]);
+        if (!specifiers || ![specifiers isKindOfClass:[NSMutableArray class]]) {
+            specifiers = [NSMutableArray arrayWithArray:specifiers];
         }
+        
+        NSArray *specifiersToAdd = [WPLoaderModel() loadSpecifiersForListController:(PSListController *)self 
+                                                                        sectionInfo:sectionInfoForBBAppDetailController(self)];
+        
+        if (specifiersToAdd) {
+            [specifiers addObjectsFromArray:specifiersToAdd];
+        }
+        
+        if (specifiersToReturn != specifiers) {
+            
+            DLog(@"orig. %@ uses unique array %@, ivar is %@", NSStringFromSelector(_cmd), specifiersToReturn, specifiers);
+            specifiersToReturn = [NSMutableArray arrayWithArray:specifiers];
+        }
+        
+#ifdef DEBUG
+        for (PSSpecifier *spec in specifiers) {
+            DLog(@"Specifier name: %@, target: %@, titleDictionary: %@, properties: %@", [spec name], [spec target], [spec titleDictionary], [spec properties]);
+        }
+#endif
+        
+        objc_setAssociatedObject([NSNumber numberWithBool:YES], WeePreferenceLoaderSpecifiersLoadedKey, specifiers, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
-    return specifiers;
+    return specifiersToReturn;
 }
 
 
-
-static __attribute__((constructor)) void _logosLocalCtor_d0f2e29d() {
-    {{Class $$PSListController = objc_getClass("PSListController"); MSHookMessageEx($$PSListController, @selector(specifiers), (IMP)&$_ungrouped$PSListController$specifiers, (IMP*)&__ungrouped$PSListController$specifiers);Class $$BulletinBoardController = objc_getClass("BulletinBoardController"); MSHookMessageEx($$BulletinBoardController, @selector(init), (IMP)&$_ungrouped$BulletinBoardController$init, (IMP*)&__ungrouped$BulletinBoardController$init);Class $$BulletinBoardAppDetailController = objc_getClass("BulletinBoardAppDetailController"); MSHookMessageEx($$BulletinBoardAppDetailController, @selector(forwardingTargetForSelector:), (IMP)&$_ungrouped$BulletinBoardAppDetailController$forwardingTargetForSelector$, (IMP*)&__ungrouped$BulletinBoardAppDetailController$forwardingTargetForSelector$);MSHookMessageEx($$BulletinBoardAppDetailController, @selector(specifiers), (IMP)&$_ungrouped$BulletinBoardAppDetailController$specifiers, (IMP*)&__ungrouped$BulletinBoardAppDetailController$specifiers);}}
-    
-    loader = [[WeePreferenceLoaderModel alloc] init];
-}
+static __attribute__((constructor)) void _logosLocalInit() { NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; {Class $$BulletinBoardController = objc_getClass("BulletinBoardController"); MSHookMessageEx($$BulletinBoardController, @selector(init), (IMP)&$_ungrouped$BulletinBoardController$init, (IMP*)&__ungrouped$BulletinBoardController$init);Class $$BulletinBoardAppDetailController = objc_getClass("BulletinBoardAppDetailController"); MSHookMessageEx($$BulletinBoardAppDetailController, @selector(specifiers), (IMP)&$_ungrouped$BulletinBoardAppDetailController$specifiers, (IMP*)&__ungrouped$BulletinBoardAppDetailController$specifiers);}  [pool drain]; }
