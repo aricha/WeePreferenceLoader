@@ -23,9 +23,9 @@ There are several ways to use WeePreferenceLoader, depending on your use case. T
 To add a basic set of preferences to your Notification Center widget, it's as easy as this:
 
 1. Create a plist file containing your settings. Your plist file requires only an `items` property, containing all of your preference items (formatted identically to a PreferenceLoader plist). 
-	* A `title` property is optional - if you specify a title, it will be used as a section header at the beginning of your group of preferences.
-2. Name your plist file `Preferences.plist`, or give it a custom name and specify it in your WeeApp's Info.plist file using the "PreferencesPlistName" key.
-3. Add the plist file to your WeeApp's bundle, in the root directory (don't place it in a subfolder).
+	* A `title` property is optional - if you specify a title, it will be used as a section header at the beginning of your group of preferences (if your specifiers do not begin with a group cell).
+2. Name your plist file `Preferences.plist`, or give it a custom name and specify it in your WeeApp's `Info.plist` file using the `PreferencesPlistName` key.
+3. Add the plist file to your WeeApp's bundle, in the root directory (don't place it in a subdirectory).
 4. You're done! WeePreferenceLoader will automatically pick up your plist file and display your preferences in the Notifications settings for your WeeApp.
 
 To add localizations to your plist file, you can either use the same localization files as your WeeApp, or use a custom bundle with separate localizations. Which brings us to...

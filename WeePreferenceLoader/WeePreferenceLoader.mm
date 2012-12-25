@@ -1,4 +1,4 @@
-#line 1 "/Users/andrewr114/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
+#line 1 "/Users/andrewr/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
 
 
 
@@ -28,13 +28,14 @@ static WeePreferenceLoaderModel *WPLoaderModel() {
 
 #include <substrate.h>
 @class BulletinBoardAppDetailController; @class BulletinBoardController; 
+static id (*_logos_orig$_ungrouped$BulletinBoardController$init)(BulletinBoardController*, SEL); static id _logos_method$_ungrouped$BulletinBoardController$init(BulletinBoardController*, SEL); static id (*_logos_orig$_ungrouped$BulletinBoardAppDetailController$specifiers)(BulletinBoardAppDetailController*, SEL); static id _logos_method$_ungrouped$BulletinBoardAppDetailController$specifiers(BulletinBoardAppDetailController*, SEL); 
 
-#line 28 "/Users/andrewr114/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
+#line 28 "/Users/andrewr/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
 
 
-static id (*__ungrouped$BulletinBoardController$init)(BulletinBoardController*, SEL);static id $_ungrouped$BulletinBoardController$init(BulletinBoardController* self, SEL _cmd) {
+static id _logos_method$_ungrouped$BulletinBoardController$init(BulletinBoardController* self, SEL _cmd) {
     [WPLoaderModel() loadEntries];
-    return __ungrouped$BulletinBoardController$init(self, _cmd);
+    return _logos_orig$_ungrouped$BulletinBoardController$init(self, _cmd);
 }
 
 
@@ -47,8 +48,8 @@ static BBSectionInfo* sectionInfoForBBAppDetailController (id controller) {
     return [[(PSListController *)controller specifier] propertyForKey:@"BBSECTION_INFO_KEY"];
 }
 
-static id (*__ungrouped$BulletinBoardAppDetailController$specifiers)(BulletinBoardAppDetailController*, SEL);static id $_ungrouped$BulletinBoardAppDetailController$specifiers(BulletinBoardAppDetailController* self, SEL _cmd) {
-    id specifiersToReturn = __ungrouped$BulletinBoardAppDetailController$specifiers(self, _cmd);
+static id _logos_method$_ungrouped$BulletinBoardAppDetailController$specifiers(BulletinBoardAppDetailController* self, SEL _cmd) {
+    id specifiersToReturn = _logos_orig$_ungrouped$BulletinBoardAppDetailController$specifiers(self, _cmd);
     
     id specifiers = MSHookIvar<id>(self, "_specifiers");
     
@@ -89,4 +90,6 @@ static id (*__ungrouped$BulletinBoardAppDetailController$specifiers)(BulletinBoa
 }
 
 
-static __attribute__((constructor)) void _logosLocalInit() { NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; {Class $$BulletinBoardController = objc_getClass("BulletinBoardController"); MSHookMessageEx($$BulletinBoardController, @selector(init), (IMP)&$_ungrouped$BulletinBoardController$init, (IMP*)&__ungrouped$BulletinBoardController$init);Class $$BulletinBoardAppDetailController = objc_getClass("BulletinBoardAppDetailController"); MSHookMessageEx($$BulletinBoardAppDetailController, @selector(specifiers), (IMP)&$_ungrouped$BulletinBoardAppDetailController$specifiers, (IMP*)&__ungrouped$BulletinBoardAppDetailController$specifiers);}  [pool drain]; }
+static __attribute__((constructor)) void _logosLocalInit() {
+{Class _logos_class$_ungrouped$BulletinBoardController = objc_getClass("BulletinBoardController"); MSHookMessageEx(_logos_class$_ungrouped$BulletinBoardController, @selector(init), (IMP)&_logos_method$_ungrouped$BulletinBoardController$init, (IMP*)&_logos_orig$_ungrouped$BulletinBoardController$init);Class _logos_class$_ungrouped$BulletinBoardAppDetailController = objc_getClass("BulletinBoardAppDetailController"); MSHookMessageEx(_logos_class$_ungrouped$BulletinBoardAppDetailController, @selector(specifiers), (IMP)&_logos_method$_ungrouped$BulletinBoardAppDetailController$specifiers, (IMP*)&_logos_orig$_ungrouped$BulletinBoardAppDetailController$specifiers);}  }
+#line 87 "/Users/andrewr/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"

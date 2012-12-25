@@ -114,6 +114,9 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
 - (void) loadEntries {
     [entries removeAllObjects];
     
+	if (![[NSFileManager defaultManager] fileExistsAtPath:ROOT_DIR])
+		return; // no WeePreferenceLoader bundles exist, no need to load entries
+	
     NSError *error = nil;
     NSArray *paths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:ROOT_DIR error:&error];
     if (error) {
@@ -268,6 +271,8 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
                 else
                     bundleController = [[BundleClass new] autorelease];
             }
+            
+            DLog(@"Bundle class: %@, controller instance: %@", BundleClass, bundleController);
         }
         else {
             NSString *plistPath = entry.plistPath;
