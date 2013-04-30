@@ -18,3 +18,5 @@ profile
 .DS_Store
 
 LatestBuild
+*.dylib
+Packages

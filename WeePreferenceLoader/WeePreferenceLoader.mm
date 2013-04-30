@@ -10,10 +10,8 @@
 
 
 
-#import <Preferences/PSListController.h>
-#import <Preferences/PSSpecifier.h>
-#import <BulletinBoard/BBSectionInfo.h>
 #import <objc/runtime.h>
+#import <CaptainHook.h>
 
 #import "WeePreferenceLoaderModel.h"
 
@@ -30,7 +28,7 @@ static WeePreferenceLoaderModel *WPLoaderModel() {
 @class BulletinBoardAppDetailController; @class BulletinBoardController; 
 static id (*_logos_orig$_ungrouped$BulletinBoardController$init)(BulletinBoardController*, SEL); static id _logos_method$_ungrouped$BulletinBoardController$init(BulletinBoardController*, SEL); static id (*_logos_orig$_ungrouped$BulletinBoardAppDetailController$specifiers)(BulletinBoardAppDetailController*, SEL); static id _logos_method$_ungrouped$BulletinBoardAppDetailController$specifiers(BulletinBoardAppDetailController*, SEL); 
 
-#line 28 "/Users/andrewr/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
+#line 26 "/Users/andrewr/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
 
 
 static id _logos_method$_ungrouped$BulletinBoardController$init(BulletinBoardController* self, SEL _cmd) {
@@ -42,7 +40,7 @@ static id _logos_method$_ungrouped$BulletinBoardController$init(BulletinBoardCon
 
 
 
-static NSString *const WeePreferenceLoaderSpecifiersLoadedKey = @"WeePreferenceLoaderSpecifiersLoadedKey";
+static char kWPSpecifiersLoaded;
 
 static BBSectionInfo* sectionInfoForBBAppDetailController (id controller) {
     return [[(PSListController *)controller specifier] propertyForKey:@"BBSECTION_INFO_KEY"];
@@ -51,17 +49,18 @@ static BBSectionInfo* sectionInfoForBBAppDetailController (id controller) {
 static id _logos_method$_ungrouped$BulletinBoardAppDetailController$specifiers(BulletinBoardAppDetailController* self, SEL _cmd) {
     id specifiersToReturn = _logos_orig$_ungrouped$BulletinBoardAppDetailController$specifiers(self, _cmd);
     
-    id specifiers = MSHookIvar<id>(self, "_specifiers");
+    NSMutableArray **specifiersRef = CHIvarRef(self, _specifiers, id);
+	NSMutableArray *specifiers = specifiersRef ? *specifiersRef : nil;
     
     
-    NSNumber *specsLoaded = objc_getAssociatedObject(specifiers, WeePreferenceLoaderSpecifiersLoadedKey);
+    NSNumber *specsLoaded = objc_getAssociatedObject(specifiers, &kWPSpecifiersLoaded);
     
     if (!specsLoaded || ![specsLoaded boolValue]) {
         DLog(@"adding specifiers!");
         
         
         if (!specifiers || ![specifiers isKindOfClass:[NSMutableArray class]]) {
-            specifiers = [NSMutableArray arrayWithArray:specifiers];
+            specifiers = [[(specifiers ?: @[]) mutableCopy] autorelease];
         }
         
         NSArray *specifiersToAdd = [WPLoaderModel() loadSpecifiersForListController:(PSListController *)self 
@@ -83,7 +82,7 @@ static id _logos_method$_ungrouped$BulletinBoardAppDetailController$specifiers(B
         }
 #endif
         
-        objc_setAssociatedObject([NSNumber numberWithBool:YES], WeePreferenceLoaderSpecifiersLoadedKey, specifiers, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(@(YES), &kWPSpecifiersLoaded, specifiers, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
     return specifiersToReturn;
@@ -92,4 +91,4 @@ static id _logos_method$_ungrouped$BulletinBoardAppDetailController$specifiers(B
 
 static __attribute__((constructor)) void _logosLocalInit() {
 {Class _logos_class$_ungrouped$BulletinBoardController = objc_getClass("BulletinBoardController"); MSHookMessageEx(_logos_class$_ungrouped$BulletinBoardController, @selector(init), (IMP)&_logos_method$_ungrouped$BulletinBoardController$init, (IMP*)&_logos_orig$_ungrouped$BulletinBoardController$init);Class _logos_class$_ungrouped$BulletinBoardAppDetailController = objc_getClass("BulletinBoardAppDetailController"); MSHookMessageEx(_logos_class$_ungrouped$BulletinBoardAppDetailController, @selector(specifiers), (IMP)&_logos_method$_ungrouped$BulletinBoardAppDetailController$specifiers, (IMP*)&_logos_orig$_ungrouped$BulletinBoardAppDetailController$specifiers);}  }
-#line 87 "/Users/andrewr/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"
+#line 86 "/Users/andrewr/Dropbox/Development/WeePreferenceLoader/WeePreferenceLoader/WeePreferenceLoader.xm"

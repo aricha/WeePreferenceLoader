@@ -9,10 +9,8 @@
 // Using Logos by Dustin Howett
 // See http://iphonedevwiki.net/index.php/Logos
 
-#import <Preferences/PSListController.h>
-#import <Preferences/PSSpecifier.h>
-#import <BulletinBoard/BBSectionInfo.h>
 #import <objc/runtime.h>
+#import <CaptainHook.h>
 
 #import "WeePreferenceLoaderModel.h"
 
@@ -36,7 +34,7 @@ static WeePreferenceLoaderModel *WPLoaderModel() {
 
 %hook BulletinBoardAppDetailController
 
-static NSString *const WeePreferenceLoaderSpecifiersLoadedKey = @"WeePreferenceLoaderSpecifiersLoadedKey";
+static char kWPSpecifiersLoaded;
 
 static BBSectionInfo* sectionInfoForBBAppDetailController (id controller) {
     return [[(PSListController *)controller specifier] propertyForKey:@"BBSECTION_INFO_KEY"];
@@ -45,17 +43,18 @@ static BBSectionInfo* sectionInfoForBBAppDetailController (id controller) {
 - (id)specifiers {
     id specifiersToReturn = %orig;
     
-    id specifiers = MSHookIvar<id>(self, "_specifiers");
+    NSMutableArray **specifiersRef = CHIvarRef(self, _specifiers, id);
+	NSMutableArray *specifiers = specifiersRef ? *specifiersRef : nil;
     
     // use an assoc. object to check if we've added our specifiers to the list yet
-    NSNumber *specsLoaded = objc_getAssociatedObject(specifiers, WeePreferenceLoaderSpecifiersLoadedKey);
+    NSNumber *specsLoaded = objc_getAssociatedObject(specifiers, &kWPSpecifiersLoaded);
     
     if (!specsLoaded || ![specsLoaded boolValue]) {
         DLog(@"adding specifiers!");
         
         // just in case Apple makes them immutable
         if (!specifiers || ![specifiers isKindOfClass:[NSMutableArray class]]) {
-            specifiers = [NSMutableArray arrayWithArray:specifiers];
+            specifiers = [[(specifiers ?: @[]) mutableCopy] autorelease];
         }
         
         NSArray *specifiersToAdd = [WPLoaderModel() loadSpecifiersForListController:(PSListController *)self 
@@ -77,7 +76,7 @@ static BBSectionInfo* sectionInfoForBBAppDetailController (id controller) {
         }
 #endif
         
-        objc_setAssociatedObject([NSNumber numberWithBool:YES], WeePreferenceLoaderSpecifiersLoadedKey, specifiers, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(@(YES), &kWPSpecifiersLoaded, specifiers, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
     return specifiersToReturn;

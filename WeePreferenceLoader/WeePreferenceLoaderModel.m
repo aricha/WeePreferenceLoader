@@ -9,10 +9,6 @@
 #import "WeePreferenceLoaderModel.h"
 
 #import <objc/runtime.h>
-#import <Preferences/PSListController.h>
-#import <Preferences/PSSpecifier.h>
-#import <BulletinBoard/BBSectionInfo.h>
-#import <Preferences/PSTableCell.h>
 #import "WPTargetProxy.h"
 
 // Different from <iOS5
@@ -59,20 +55,18 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
 
 @implementation WPEntry
 
-@synthesize plist, plistName, plistPath, sections;
-
 - (void) dealloc {
-    [plist release];
-    [plistName release];
-    [plistPath release];
-    [sections release];
+    [_plist release];
+    [_plistName release];
+    [_plistPath release];
+    [_sections release];
     
     [super dealloc];
 }
 
 - (id) initWithPlist:(NSDictionary *)aPlist {
     if ((self = [super init])) {
-        plist = [aPlist retain];
+        _plist = [aPlist retain];
     }
     return self;
 }
@@ -250,7 +244,7 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
                 // by WeePreferenceLoader at runtime), so should only be applicable to entries loaded from weeAppBundle
                 bundle = [NSBundle bundleWithPath:[weeBundlePath stringByAppendingFormat:@"/%@.bundle", bundleName]];
                 if (!bundle) {
-                    bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:@"/Library/WeePreferenceLoader/Preferences/%@.bundle", bundleName]];
+                    bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:@"%@/%@.bundle", ROOT_DIR, bundleName]];
                 }
             }
             
@@ -299,21 +293,21 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
         if (bundle && ![[bundle bundlePath] isEqualToString:ROOT_DIR]) {
             for (PSSpecifier *spec in bundleSpecifiers) {
                 if ([spec name])
-                    [spec setName:NSLocalizedStringWithDefaultValue([spec name], nil, bundle, [spec name], nil)];
+                    [spec setName:[bundle localizedStringForKey:spec.name value:spec.name table:nil]];
                 
                 NSDictionary *titleDict = [spec titleDictionary];
                 if (titleDict) {
                     NSMutableDictionary *localizedTitles = [NSMutableDictionary dictionary];
                     for (id key in [titleDict allKeys]) {
                         NSString *title = [titleDict objectForKey:key];
-                        [localizedTitles setObject:NSLocalizedStringWithDefaultValue(title, nil, bundle, title, nil) forKey:key];
+                        [localizedTitles setObject:[bundle localizedStringForKey:title value:title table:nil] forKey:key];
                     }
                     [spec setTitleDictionary:localizedTitles];
                 }
                 
                 NSString *footer = [spec propertyForKey:PSFooterTextGroupKey];
                 if (footer)
-                    [spec setProperty:NSLocalizedStringWithDefaultValue(footer, nil, bundle, footer, nil) forKey:PSFooterTextGroupKey];
+                    [spec setProperty:[bundle localizedStringForKey:footer value:footer table:nil] forKey:PSFooterTextGroupKey];
             }
         }
         
@@ -329,7 +323,7 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
                                   bundleController:bundleController];
             }
             
-            if ([(PSSpecifier *)[bundleSpecifiers objectAtIndex:0] cellType] != [PSTableCell cellTypeFromString:@"PSGroupCell"]) {
+            if (bundleSpecifiers.count && [(PSSpecifier *)[bundleSpecifiers objectAtIndex:0] cellType] != [PSTableCell cellTypeFromString:@"PSGroupCell"]) {
                 NSString *title = [entry.plist objectForKey:WeePreferenceLoaderTitleKey]; // title can be nil
                 [specifiers addObject:[PSSpecifier groupSpecifierWithName:title]];
             }

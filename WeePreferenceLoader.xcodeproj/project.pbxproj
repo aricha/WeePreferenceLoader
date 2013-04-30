@@ -19,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D234672172F53B200E402B6 /* PrivateHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrivateHeaders.h; sourceTree = "<group>"; };
 		0D740F12159ACD8F004C5424 /* WPTargetProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WPTargetProxy.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		0D740F13159ACD8F004C5424 /* WPTargetProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = WPTargetProxy.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		0DD29FC41532445100A5B9E8 /* WeePreferenceLoader.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = WeePreferenceLoader.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +87,7 @@
 				0DD29FD21532445100A5B9E8 /* WeePreferenceLoader.mm */,
 				0DD29FE815324B2400A5B9E8 /* WeePreferenceLoaderModel.h */,
 				0DD29FE915324B2400A5B9E8 /* WeePreferenceLoaderModel.m */,
+				0D234672172F53B200E402B6 /* PrivateHeaders.h */,
 				0DD29FCA1532445100A5B9E8 /* Package */,
 				0DD29FCE1532445100A5B9E8 /* Supporting Files */,
 			);

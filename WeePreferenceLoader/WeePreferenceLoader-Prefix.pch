@@ -6,5 +6,6 @@
 
 #import <Foundation/Foundation.h>
 #import "DebugTools.h"
+#import "PrivateHeaders.h"
 
 #endif

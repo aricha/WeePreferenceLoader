@@ -11,9 +11,6 @@
 
 @implementation WPTargetProxy
 
-@synthesize viewController = _viewController;
-@synthesize bundleController = _bundleController;
-
 - (void) dealloc {
     [_bundleController release];
     
@@ -48,15 +45,5 @@
     
     return forwardingTarget;
 }
-
-//- (void) setViewController:(UIViewController *)viewController {
-//    if (_viewController != viewController) {
-//        _viewController = viewController;
-//        
-//        // pose as view controller
-//        if (_viewController)
-//            object_setClass(self, [_viewController class]);
-//    }
-//}
 
 @end
