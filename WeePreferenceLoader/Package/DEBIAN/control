@@ -1,6 +1,6 @@
 Package: com.arichardson.WeePreferenceLoader
 Name: WeePreferenceLoader
-Version: 1.0-1
+Version: 1.1
 Description: A framework to load preferences in Notifications settings.
 Section: System
 Depends: firmware (>= 5.0), mobilesubstrate

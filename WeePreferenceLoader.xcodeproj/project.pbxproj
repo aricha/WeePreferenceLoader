@@ -249,103 +249,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		0D740F07159821CB004C5424 /* Release - iPad */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = YES;
-				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
-				FRAMEWORK_SEARCH_PATHS = "$(iOSOpenDevPath)/frameworks/**";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
-				SDKROOT = iphoneos5.1;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				iOSOpenDevPath = /opt/iOSOpenDev;
-			};
-			name = "Release - iPad";
-		};
-		0D740F08159821CB004C5424 /* Release - iPad */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "WeePreferenceLoader/WeePreferenceLoader-Prefix.pch";
-				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/iOSOpenDev/lib,
-					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks/Preferences.framework\"",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				iOSOpenDevCopyOnBuild = NO;
-				iOSOpenDevDevice = 192.168.1.127;
-				iOSOpenDevInstallOnAnyBuild = YES;
-				iOSOpenDevInstallOnProfiling = NO;
-				iOSOpenDevRespringOnInstall = NO;
-				iOSOpenDevUsePackageVersionPList = NO;
-			};
-			name = "Release - iPad";
-		};
-		0D740F09159821D2004C5424 /* Debug - iPad */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = NO;
-				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
-				FRAMEWORK_SEARCH_PATHS = "$(iOSOpenDevPath)/frameworks/**";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
-				SDKROOT = iphoneos5.1;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = NO;
-				iOSOpenDevPath = /opt/iOSOpenDev;
-			};
-			name = "Debug - iPad";
-		};
-		0D740F0A159821D2004C5424 /* Debug - iPad */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "WeePreferenceLoader/WeePreferenceLoader-Prefix.pch";
-				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/iOSOpenDev/lib,
-					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks/Preferences.framework\"",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				iOSOpenDevCopyOnBuild = NO;
-				iOSOpenDevDevice = 192.168.1.127;
-				iOSOpenDevInstallOnAnyBuild = YES;
-				iOSOpenDevInstallOnProfiling = NO;
-				iOSOpenDevRespringOnInstall = NO;
-				iOSOpenDevUsePackageVersionPList = NO;
-			};
-			name = "Debug - iPad";
-		};
 		0DD29FD81532445100A5B9E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -450,9 +353,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0DD29FD81532445100A5B9E8 /* Release */,
-				0D740F07159821CB004C5424 /* Release - iPad */,
 				0DD29FD91532445100A5B9E8 /* Debug */,
-				0D740F09159821D2004C5424 /* Debug - iPad */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -461,9 +362,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0DD29FDB1532445100A5B9E8 /* Release */,
-				0D740F08159821CB004C5424 /* Release - iPad */,
 				0DD29FDC1532445100A5B9E8 /* Debug */,
-				0D740F0A159821D2004C5424 /* Debug - iPad */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

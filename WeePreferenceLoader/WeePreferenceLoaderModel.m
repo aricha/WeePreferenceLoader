@@ -112,7 +112,7 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
 		return; // no WeePreferenceLoader bundles exist, no need to load entries
 	
     NSError *error = nil;
-    NSArray *paths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:ROOT_DIR error:&error];
+    NSArray *paths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:ROOT_DIR error:&error];
     if (error) {
         NSLog(@"Loading WeePreferenceLoader entries failed. Error: %@", [error description]);
         return;
@@ -121,6 +121,9 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
     for (NSString *path in paths) {
         if (![[path pathExtension] isEqualToString:@"plist"])
             continue;
+		// ignore Info.plist for bundles
+		else if ([[path lastPathComponent] rangeOfString:@"Info.plist" options:NSCaseInsensitiveSearch].length != 0)
+			continue;
         
         NSString *fullPath = [ROOT_DIR stringByAppendingPathComponent:path];
         NSMutableDictionary *plist = [NSMutableDictionary dictionaryWithContentsOfFile:fullPath];
@@ -135,12 +138,12 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
             NSString *bundlePath = [plist objectForKey:WeePreferenceLoaderBundlePathKey];
             if (!bundlePath) {
                 // search for bundle
-                NSString *fullBundleName = [bundleName stringByAppendingPathExtension:@"bundle"];
-                bundlePath = [[fullPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:fullBundleName];
+                NSString *bundleNameWithExtension = [bundleName stringByAppendingPathExtension:@"bundle"];
+                bundlePath = [[fullPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:bundleNameWithExtension];
                 BOOL found = [[NSFileManager defaultManager] fileExistsAtPath:bundlePath];
                 
                 if (!found && ![ROOT_DIR isEqualToString:[fullPath stringByDeletingLastPathComponent]]) {
-                    bundlePath = [ROOT_DIR stringByAppendingPathComponent:fullBundleName];
+                    bundlePath = [ROOT_DIR stringByAppendingPathComponent:bundleNameWithExtension];
                     found = [[NSFileManager defaultManager] fileExistsAtPath:bundlePath];
                 }
                 
@@ -226,7 +229,7 @@ NSString *const WeePreferenceLoaderTitleKey = @"title";
         NSBundle *bundle = nil;
         id bundleController = nil;
         
-        DLog(@"Loading plist %@", entry.plistName);//[plist objectForKey:WeePreferenceLoaderPlistNameKey]);
+        DLog(@"Loading plist %@", entry.plistName);
         
         if (bundleName) {
             DLog(@"BB section %@ has a bundle, it is: %@", sectionID, bundleName);
